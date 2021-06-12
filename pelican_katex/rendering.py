@@ -23,8 +23,8 @@ KATEX_NODEJS_BINARY = "node"
 # Preamble to prepend to any rendered LaTeX
 KATEX_PREAMBLE = None
 
-# If latex2mathml should be used instead of Katex
-KATEX_MATHML = True
+# Which LaTex rendering backend to use
+KATEX_BACKEND = "latex2mathml"
 
 # A list of file-local additions to the preamble
 LOCAL_PREAMBLES = []
@@ -66,7 +66,9 @@ def render_latex(latex, options=None):
         KaTeX-style options such as displayMode
     """
 
-    if KATEX_MATHML:
+    if KATEX_BACKEND == "latex2mathml":
         return render_latex_mathml(latex, options)
-    else:
+    elif KATEX_BACKEND == "katex":
         return render_latex_katex(latex, options)
+    else:
+        raise KaTeXError(f"Unknown backend '{KATEX_BACKEND}'!")

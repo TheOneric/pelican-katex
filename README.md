@@ -146,9 +146,10 @@ The plugin offers several configuration options that you can set in your
 #     "throwOnError": True
 # }
 
-# If set to True (the default) latex2mathml will be used,
-# if set to False KaTeX will be used instead
-# KATEX_MATHML = True
+# Controls which backend will be used, available are:
+#  - "latex2mathml"  (default)
+#  - "katex"
+# KATEX_BACKEND = "latex2mathml"
 ```
 
 ## Preamble (KaTeX only)
