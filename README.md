@@ -1,35 +1,84 @@
 # LaTeX Pre-rendering for Pelican
 
-`pelican-katex` integrates LaTeX rendering directly into the pelican generation
+`pelican-mathml` integrates LaTeX rendering directly into the pelican generation
 process and eliminates the delay in displaying math you usually experience on
 the web. It does so by hooking itself into docutils' reStructuredText parser as
-well as the markdown package and processing the formulas with
-[KaTeX](https://github.com/KaTeX/KaTeX). The generated HTML pages only contain
-the finished HTML/MathML output. Therefore, you do not need to ship the KaTeX
+well as the markdown package and processing the formulas with a LaTeX to MathML
+or HTML translator, either
+[latex2mathml](https://github.com/roniemartinez/latex2mathml) or
+[KaTeX](https://github.com/KaTeX/KaTeX).
+The generated HTML pages only contain the finished HTML/MathML output.
+Therefore, you do not need to ship a KaTeX, MathJax or similar
 javascript implementation with your website anymore and improve the
 accessibility as well as the load time of your internet presence.
 
-For a demo visit this [blog
+Note, that if using the KaTeX backend, you still need to include the KaTeX
+stylesheets with your website.
+
+For a demo (using the KaTeX backend) visit this [blog
 post](https://martenlienen.com/blog/sampling-k-partite-graph-edges/). Notice how all
 the formulas are just there. There is no loading and the website does not even
 serve the javascript part of KaTeX.
 
-Note, that you still need to include the KaTeX stylesheets with your website, for
-example
-
-```html
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
-      crossorigin="anonymous">
-```
+Forked from [pelican-katex](https://github.com/martenlienen/pelican-katex).
 
 ## Installation
 
-First of all, you need to install `nodejs` so that `pelican-katex` can run
-KaTeX. Then run `pip install pelican-katex` and add `"pelican_katex"` to the
-`PlUGINS` setting in your configuration file. Finally, remove the `katex.js`
-`<script>` tag from your template and enjoy a lighter website and instant
-formulas.
+First of all, you need to have a Python3 installation.
+The dependencies vary depending on the backend you wnat to use.
+ - For latex2mathml you only need `latex2mathml`, eg via
+   `pip3 install latex2mathml`.
+ - For KaTeX, you need a `nodejs` installation to run `katex.js`.
+
+Currently this module is not available via pip and
+still uses the `pelican_katex` name.
+To make it available in developement mode, clone this repo and run the
+following inside the repo root:
+```sh
+pip3 install --user -e "$PWD"
+```
+Finally, add `"pelican_katex"` to the `PLUGINS` setting
+in your pelican configuration file.
+
+If you previously used `katex.js` in your template,
+you can now remove it.
+
+## Backends
+
+ - `latex2mathml` is faster, does not require `nodejs`
+    and also doesn't require a large-ish CSS file and KaTeX-fonts
+    to be loaded.
+    However it does not support preamble.
+
+    While not required, you might still want to add a few CSS lines however:
+    ```css
+    math {
+        font-family: 'Latin Modern Math',math;
+    }
+    math[display='inline'] {
+        font-size: 110%;
+    }
+    math[display='block'] {
+        font-size: 135%;
+        margin-block: 0.4em;
+    }
+    ```
+
+ - **KaTeX** supports a preamble and can generate fallback pure-HTML
+    for browsers with subpar MathML support.
+    However it requires nodejs, is slower in generation and also requires a
+    special CSS-file and fonts. You must therefore add eg this to your template:
+    ```html
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
+      crossorigin="anonymous">
+    ```
+
+    Note that if you only want to use KaTeX anyway it might be better to use
+    [pelican-katex](https://github.com/martenlienen/pelican-katex) instead
+    as I can't give much support for the KaTeX backend.
+
+The default is currently KaTeX.
 
 ## Syntax
 
@@ -98,11 +147,11 @@ The plugin offers several configuration options that you can set in your
 # }
 
 # Alternatively, you can use the latex2mathml python module instead of KaTeX
-# It is more limited, but faster and doesn't need NodeJS
+# It is missing eg preamble support, but faster and doesn't need NodeJS
 # KATEX_MATHML = True
 ```
 
-## Preamble
+## Preamble (KaTeX only)
 
 The `KATEX_PREAMBLE` option allows you to share definitions between all of your
 math blocks across all files. It takes a string of any LaTeX commands you would
