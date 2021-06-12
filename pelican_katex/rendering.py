@@ -24,7 +24,7 @@ KATEX_NODEJS_BINARY = "node"
 KATEX_PREAMBLE = None
 
 # If latex2mathml should be used instead of Katex
-KATEX_MATHML = False
+KATEX_MATHML = True
 
 # A list of file-local additions to the preamble
 LOCAL_PREAMBLES = []

@@ -45,6 +45,8 @@ you can now remove it.
 
 ## Backends
 
+The default backend is `latex2mathml`.
+
  - `latex2mathml` is faster, does not require `nodejs`
     and also doesn't require a large-ish CSS file and KaTeX-fonts
     to be loaded.
@@ -77,8 +79,6 @@ you can now remove it.
     Note that if you only want to use KaTeX anyway it might be better to use
     [pelican-katex](https://github.com/martenlienen/pelican-katex) instead
     as I can't give much support for the KaTeX backend.
-
-The default is currently KaTeX.
 
 ## Syntax
 
@@ -146,8 +146,8 @@ The plugin offers several configuration options that you can set in your
 #     "throwOnError": True
 # }
 
-# Alternatively, you can use the latex2mathml python module instead of KaTeX
-# It is missing eg preamble support, but faster and doesn't need NodeJS
+# If set to True (the default) latex2mathml will be used,
+# if set to False KaTeX will be used instead
 # KATEX_MATHML = True
 ```
 
